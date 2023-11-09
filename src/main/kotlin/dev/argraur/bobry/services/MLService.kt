@@ -15,9 +15,9 @@ import java.io.InputStreamReader
 
 @Single
 class MLService {
-    private val mlServicePythonFile = "./real_time_obj_detection.py"
-    private val mlServiceInputPath = "./input"
-    private val mlServiceOutputPath = "./output"
+    private val mlServicePythonFile = "./ml/video/real_time_obj_detection.py"
+    private val mlServiceInputPath = "./ml/input"
+    private val mlServiceOutputPath = "./ml/output"
 
     private val _outputFlow = MutableSharedFlow<MLMessage>()
     val outputFlow = _outputFlow.asSharedFlow()
