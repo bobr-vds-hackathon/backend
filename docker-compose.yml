@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  bobr:
+    build: .
+    ports:
+      - '8080:8080'
+    volumes:
+      - './ml:/app/ml'
+    environment:
+      - TZ=Europe/Moscow
+    image: bobr

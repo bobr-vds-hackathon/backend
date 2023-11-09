@@ -1,18 +1,19 @@
 package dev.argraur.bobry
 
-import dev.argraur.bobry.plugins.*
+import dev.argraur.bobry.di.server.ServerModule
+import dev.argraur.bobry.di.server.engineModule
+import dev.argraur.bobry.server.BobrServer
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import org.koin.core.context.startKoin
+import org.koin.java.KoinJavaComponent.inject
+import org.koin.ksp.generated.module
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
-}
+    startKoin {
+        modules(engineModule, ServerModule().module)
+    }
 
-fun Application.module() {
-    configureHTTP()
-    configureSerialization()
-    configureSockets()
-    configureRouting()
+    val server by inject<BobrServer>(BobrServer::class.java)
+
+    server.start()
 }
