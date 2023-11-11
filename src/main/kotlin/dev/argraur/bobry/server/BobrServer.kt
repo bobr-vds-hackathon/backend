@@ -6,6 +6,7 @@ import dev.argraur.bobry.di.application.HandlerModule
 import dev.argraur.bobry.di.application.MLModule
 import dev.argraur.bobry.di.application.ManagerModule
 import dev.argraur.bobry.di.application.ServiceModule
+import dev.argraur.bobry.ml.CorrectionService
 import dev.argraur.bobry.ml.MLService
 import dev.argraur.bobry.utils.Constants
 import dev.argraur.bobry.utils.LoggerDelegate
@@ -24,6 +25,7 @@ import org.koin.ktor.ext.get
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 import java.time.Duration
+import kotlin.system.exitProcess
 
 fun Application.setup() {
     val logger by LoggerDelegate("Application")
@@ -59,6 +61,7 @@ fun Application.setup() {
     }
 
     get<MLService>().startService()
+    get<CorrectionService>().startService()
 }
 
 @Single
@@ -82,7 +85,7 @@ class BobrServer(
 
     fun stop() {
         logger.info("Gracefully stopping server...")
-        //embeddedServer.stop()
-        //exitProcess(0)
+        embeddedServer.stop()
+        exitProcess(0)
     }
 }
