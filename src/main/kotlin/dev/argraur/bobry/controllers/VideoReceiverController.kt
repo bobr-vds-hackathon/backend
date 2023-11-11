@@ -46,7 +46,7 @@ class VideoReceiverController : ApiController {
 
         val videoId = videoIdPart?.value
 
-        logger.info("Received videoId = $videoId.mp4")
+        logger.info("Received videoId = $videoId")
         logger.info("Video file name: ${videoFilePart?.originalFileName}")
 
         val result = videoManager.saveVideo(videoId!!, videoFilePart!!)
