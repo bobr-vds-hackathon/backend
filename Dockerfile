@@ -32,6 +32,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN apt install -y libglib2.0-0
 
+RUN mkdir /app/input /app/output
+
 COPY --from=build /src/build/libs/*.jar /app/bobr-kurwa.jar
 
 ENTRYPOINT ["java","-jar","/app/bobr-kurwa.jar"]

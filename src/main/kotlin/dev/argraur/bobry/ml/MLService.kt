@@ -17,7 +17,7 @@ import java.io.InputStreamReader
 @Single
 class MLService {
     companion object {
-        val dir = System.getProperty("user.dir")
+        val dir = System.getProperty("user.dir") + "/app"
         val mlServicePythonFile = "$dir/ml/real_time_obj_detection.py"
         val mlServiceInputPath = "$dir/input"
         val mlServiceOutputPath = "$dir/output"
