@@ -1,10 +1,12 @@
 package dev.argraur.bobry.ml
 
 import dev.argraur.bobry.utils.LoggerDelegate
+import org.koin.core.annotation.Single
 import java.io.IOException
 import kotlin.io.path.Path
 import kotlin.io.path.createDirectory
 
+@Single
 class CorrectionService {
     companion object {
         val dir = System.getProperty("user.dir")
