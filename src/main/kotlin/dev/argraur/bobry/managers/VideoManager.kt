@@ -20,7 +20,7 @@ class VideoManager {
     val videos: SharedFlow<Video> get() = _videos
 
     fun addVideoToQueue(): String {
-        val videoId = UUID.randomUUID().toString()
+        val videoId = UUID.randomUUID().toString().replace("-","_")
 
         videoQueue.add(videoId)
 

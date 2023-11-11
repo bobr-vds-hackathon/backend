@@ -20,8 +20,8 @@ class VideoService(
         CoroutineScope(Dispatchers.IO).launch {
             logger.info("Observing events for video id = ${video.id}")
             try {
-                session.sendSerialized(MLMessage(id, video.file, "it works"))
                 mlService.outputFlow.collect {
+		    println("Collected MLMessage: $it")
                     if (session.isActive && it.id == id) {
                         session.sendSerialized(it)
                     }
