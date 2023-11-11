@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class MLMessage(
     val id: String,
     val file: String,
-    val timestamp: String
+    val timestamp: String,
+    var base64Image: String
 )
