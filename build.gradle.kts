@@ -45,6 +45,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
 }

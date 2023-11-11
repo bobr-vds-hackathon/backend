@@ -1,6 +1,9 @@
 package dev.argraur.bobry.services
 
+import dev.argraur.bobry.ml.MLService
+import dev.argraur.bobry.model.MLMessage
 import dev.argraur.bobry.model.Video
+import dev.argraur.bobry.utils.LoggerDelegate
 import io.ktor.server.websocket.*
 import kotlinx.coroutines.*
 import org.koin.ktor.ext.inject
@@ -9,19 +12,22 @@ class VideoService(
     private val session: DefaultWebSocketServerSession,
     private val video: Video
 ) {
+    private val logger by LoggerDelegate()
     private val mlService by session.application.inject<MLService>()
     val id = video.id
 
     fun startObserving() : Job =
         CoroutineScope(Dispatchers.IO).launch {
+            logger.info("Observing events for video id = ${video.id}")
             try {
-                // TODO: Put input files
+                session.sendSerialized(MLMessage(id, video.file, "it works"))
                 mlService.outputFlow.collect {
-                    if (session.isActive && it.id == id)
+                    if (session.isActive && it.id == id) {
                         session.sendSerialized(it)
+                    }
                 }
             } catch (e: CancellationException) {
-                println("Stream processing was cancelled")
+                logger.info("Video processing was cancelled")
             }
         }
 }

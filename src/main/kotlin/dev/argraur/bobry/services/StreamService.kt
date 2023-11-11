@@ -1,5 +1,6 @@
 package dev.argraur.bobry.services
 
+import dev.argraur.bobry.ml.MLService
 import dev.argraur.bobry.model.Stream
 import io.ktor.server.websocket.*
 import kotlinx.coroutines.*

@@ -1,6 +1,5 @@
-package dev.argraur.bobry.controllers.impls
+package dev.argraur.bobry.controllers
 
-import dev.argraur.bobry.controllers.ApiController
 import dev.argraur.bobry.controllers.annotations.HttpGet
 import dev.argraur.bobry.services.HelloService
 import dev.argraur.bobry.utils.HttpContext
