@@ -18,7 +18,7 @@ import java.io.InputStreamReader
 class MLService {
     companion object {
         val dir = System.getProperty("user.dir")
-        val mlServicePythonFile = "$dir/ml/video/real_time_obj_detection.py"
+        val mlServicePythonFile = "$dir/ml/real_time_obj_detection.py"
         val mlServiceInputPath = "$dir/input"
         val mlServiceOutputPath = "$dir/output"
     }
@@ -38,8 +38,7 @@ class MLService {
         logger.info("Starting ML service!")
 
         val processBuilder = ProcessBuilder(
-            "cmd.exe", "/c",
-            "python.exe", mlServicePythonFile,
+            "python", mlServicePythonFile,
             "-i", mlServiceInputPath,
             "-o", mlServiceOutputPath
         )
@@ -58,19 +57,25 @@ class MLService {
 
         observerJob = CoroutineScope(Dispatchers.IO).launch {
             val reader = BufferedReader(InputStreamReader(process.inputStream))
-            var line: String?
-            reader.use {
-                while (process.isAlive && isActive) {
-                    line = it.readLine()
-                    if (line != null) {
-                        logger.info("Read line from STDOUT: $line")
-                        try {
-                            val message = Json.decodeFromString<MLMessage>(line!!)
-                            logger.info("Decoded to message: $message. Emitting value")
-                            _outputFlow.emit(message)
-                        } catch (_: SerializationException) { }
+            val errReader = BufferedReader(InputStreamReader(process.errorStream))
+            reader.use { i ->
+                errReader.use { e ->
+                    while (process.isAlive && isActive) {
+                        val line = i.readLine()
+                        val errLine = e.readLine()
+                        if (line != null) {
+                            logger.info("Read line from STDOUT: $line")
+                            try {
+                                val message = Json.decodeFromString<MLMessage>(line!!)
+                                logger.info("Decoded to message: $message. Emitting value")
+                                _outputFlow.emit(message)
+                            } catch (_: SerializationException) { }
+                        }
+                        if (errLine != null) {
+                            logger.error(errLine)
+                        }
+                        delay(100)
                     }
-                    delay(100)
                 }
             }
 

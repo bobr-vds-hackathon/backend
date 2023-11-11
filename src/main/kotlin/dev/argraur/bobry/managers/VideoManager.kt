@@ -37,7 +37,7 @@ class VideoManager {
 
         val stream = videoFilePart.streamProvider()
 
-        val path = MLService.mlServiceInputPath + "/video-$id.mp4"
+        val path = MLService.mlServiceInputPath + "/video_$id.mp4"
 
         withContext(Dispatchers.IO) {
             val fileStream = FileOutputStream(path)
