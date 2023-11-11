@@ -53,7 +53,6 @@ fun Application.setup() {
 
     routing {
         routeControllers()
-        swaggerUI(path = "swagger")
     }
 
     install(ContentNegotiation) {
