@@ -62,17 +62,21 @@ class MLService {
             reader.use { i ->
                 println("Using reader")
                 while (process.isAlive && isActive) {
-                    println("Reading line")
-                    val line = i.readLine()
-                    if (line != null) {
-                        logger.info("Read line from STDOUT: $line")
-                        try {
-                            val message = Json.decodeFromString<MLMessage>(line!!)
-                            logger.info("Decoded to message: $message. Emitting value")
-                            _outputFlow.emit(message)
-                        } catch (_: SerializationException) { }
+                    if (i.ready()) {
+                        println("Ready!")
+                        val line = i.readLine()
+                        if (line != null) {
+                            logger.info("Read line from STDOUT: $line")
+                            try {
+                                val message = Json.decodeFromString<MLMessage>(line!!)
+                                logger.info("Decoded to message: $message. Emitting value")
+                                _outputFlow.emit(message)
+                            } catch (_: SerializationException) {
+                            }
+                        }
+                    } else {
+                        delay(100)
                     }
-                    delay(100)
                 }
             }
 
