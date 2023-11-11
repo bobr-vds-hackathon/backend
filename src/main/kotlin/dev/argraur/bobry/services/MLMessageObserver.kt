@@ -1,7 +1,6 @@
 package dev.argraur.bobry.services
 
 import dev.argraur.bobry.ml.MLService
-import dev.argraur.bobry.model.Video
 import dev.argraur.bobry.utils.LoggerDelegate
 import io.ktor.server.websocket.*
 import kotlinx.coroutines.*
@@ -10,18 +9,17 @@ import java.io.File
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-class VideoService(
+class MLMessageObserver(
     private val session: DefaultWebSocketServerSession,
-    private val video: Video
+    private val id: String
 ) {
     private val logger by LoggerDelegate()
     private val mlService by session.application.inject<MLService>()
-    val id = video.id
 
     @OptIn(ExperimentalEncodingApi::class)
     fun startObserving() : Job =
         CoroutineScope(Dispatchers.IO).launch {
-            logger.info("Observing events for video id = ${video.id}")
+            logger.info("Observing events for source id = $id")
             try {
                 mlService.outputFlow.collect {
                     logger.info("Collected MLMessage: $it")
@@ -31,7 +29,7 @@ class VideoService(
                     }
                 }
             } catch (e: CancellationException) {
-                logger.info("Video processing was cancelled")
+                logger.info("Source processing was cancelled")
             }
         }
 }

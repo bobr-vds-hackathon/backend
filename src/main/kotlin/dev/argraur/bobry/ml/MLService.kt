@@ -34,7 +34,7 @@ class MLService {
     val server by KoinJavaComponent.inject<BobrServer>(BobrServer::class.java)
 
     fun startService(): Boolean {
-        println("Dir: $dir")
+        println("Input path: $mlServiceInputPath")
         logger.info("Starting ML service!")
 
         val processBuilder = ProcessBuilder(
@@ -55,21 +55,17 @@ class MLService {
 
         logger.info("Launching observer job")
 
-        observerJob = Job()
-
-        CoroutineScope(Dispatchers.IO + observerJob).launch {
+        observerJob = CoroutineScope(Dispatchers.IO).launch {
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             reader.use { i ->
-                println("Using reader")
                 while (process.isAlive && isActive) {
                     if (i.ready()) {
-                        println("Ready!")
                         val line = i.readLine()
                         if (line != null) {
-                            logger.info("Read line from STDOUT: $line")
+                            logger.info(line)
                             try {
                                 val message = Json.decodeFromString<MLMessage>(line!!)
-                                logger.info("Decoded to message: $message. Emitting value")
+                                logger.info("Decoded to ML message: $message. Emitting value")
                                 _outputFlow.emit(message)
                             } catch (_: SerializationException) {
                             }
