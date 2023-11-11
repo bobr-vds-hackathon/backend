@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Stream(
-    var id: String,
+    var id: String = "",
     val url: String,
     val login: String,
     val password: String,

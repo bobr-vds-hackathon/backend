@@ -26,39 +26,40 @@ class VideoReceiverController : ApiController {
 
         val multipart = call.receiveMultipart()
         var videoFilePart: PartData.FileItem? = null
-        var videoId: String? = null
+        var videoIdPart: PartData.FormItem? = null
 
         multipart.forEachPart { part ->
             when (part) {
-                is PartData.FormItem -> {
-                    if (part.name == "id") {
-                        videoId = part.value
-                    }
-                }
-                is PartData.FileItem -> {
-                    if (part.name == "video" && part.originalFileName?.endsWith(".mp4") == true) {
+                is PartData.FormItem ->
+                    if (part.name == "id")
+                        videoIdPart = part
+
+                is PartData.FileItem ->
+                    if (part.name == "video" && part.originalFileName?.endsWith(".mp4") == true)
                         videoFilePart = part
 
-                        logger.info("Received videoId = $videoId.mp4")
-                        logger.info("Video file name: ${videoFilePart?.originalFileName}")
-
-                        if (videoManager.saveVideo(videoId!!, videoFilePart!!))
-                            call.respond(HttpStatusCode.OK)
-
-                        call.respond(HttpStatusCode.InternalServerError)
-                    }
-                }
-
-                is PartData.BinaryChannelItem -> {}
-                is PartData.BinaryItem -> {}
+                else -> part.dispose()
             }
-
-            part.dispose()
         }
 
-        if (videoFilePart == null || videoId == null) {
+        if (videoFilePart == null || videoIdPart == null) {
             call.respond(HttpStatusCode.BadRequest, "Missing video file or ID")
             return
         }
+
+        val videoId = videoIdPart?.value
+
+        logger.info("Received videoId = $videoId.mp4")
+        logger.info("Video file name: ${videoFilePart?.originalFileName}")
+
+        val result = videoManager.saveVideo(videoId!!, videoFilePart!!)
+
+        videoFilePart!!.dispose()
+        videoIdPart!!.dispose()
+
+        if (result)
+            call.respond(HttpStatusCode.OK)
+
+        call.respond(HttpStatusCode.InternalServerError)
     }
 }
