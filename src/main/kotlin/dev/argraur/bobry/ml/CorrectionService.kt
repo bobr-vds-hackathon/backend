@@ -9,10 +9,9 @@ import kotlin.io.path.createDirectory
 @Single
 class CorrectionService {
     companion object {
-        val dir = System.getProperty("user.dir")
-        val correctionPythonFile = "$dir/ml/airflow/DAG_Fine_Tune.py"
-        val correctionDatasetFolder = "$dir/ml/dataset"
-        val correctionTrashFolder = "$dir/ml/dataset/images"
+        val correctionPythonFile = "/app/ml/airflow/DAG_Fine_Tune.py"
+        val correctionDatasetFolder = "/dataset"
+        val correctionTrashFolder = "/dataset/images"
     }
 
     private val logger by LoggerDelegate()

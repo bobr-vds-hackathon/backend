@@ -1,16 +1,13 @@
 package dev.argraur.bobry.controllers
 
 import dev.argraur.bobry.controllers.annotations.HttpPost
-import dev.argraur.bobry.handlers.WebSocketHandlerManager
 import dev.argraur.bobry.managers.VideoManager
-import dev.argraur.bobry.utils.HttpContext
 import dev.argraur.bobry.utils.LoggerDelegate
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.server.websocket.*
 import io.ktor.util.pipeline.*
 import org.koin.core.annotation.Single
 import org.koin.ktor.ext.inject

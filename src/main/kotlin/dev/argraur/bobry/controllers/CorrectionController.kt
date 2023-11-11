@@ -4,7 +4,7 @@ import dev.argraur.bobry.controllers.annotations.HttpPost
 import dev.argraur.bobry.ml.CorrectionService
 import dev.argraur.bobry.ml.MLService
 import dev.argraur.bobry.model.CorrectionRequest
-import dev.argraur.bobry.utils.HttpContext
+import dev.argraur.bobry.controllers.utils.HttpContext
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
