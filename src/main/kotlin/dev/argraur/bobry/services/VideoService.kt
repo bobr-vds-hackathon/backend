@@ -26,7 +26,7 @@ class VideoService(
                 mlService.outputFlow.collect {
                     logger.info("Collected MLMessage: $it")
                     if (session.isActive && it.id == id) {
-                        it.base64Image = Base64.encode(File(MLService.mlServiceOutputPath + "/${it.file}").readBytes())
+                        it.base64Image = Base64.encode(File(MLService.mlServiceOutputPath + "/$id/${it.file}").readBytes())
                         session.sendSerialized(it)
                     }
                 }
