@@ -55,27 +55,24 @@ class MLService {
 
         logger.info("Launching observer job")
 
-        observerJob = CoroutineScope(Dispatchers.IO).launch {
+        observerJob = Job()
+
+        CoroutineScope(Dispatchers.IO + observerJob).launch {
             val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val errReader = BufferedReader(InputStreamReader(process.errorStream))
             reader.use { i ->
-                errReader.use { e ->
-                    while (process.isAlive && isActive) {
-                        val line = i.readLine()
-                        val errLine = e.readLine()
-                        if (line != null) {
-                            logger.info("Read line from STDOUT: $line")
-                            try {
-                                val message = Json.decodeFromString<MLMessage>(line!!)
-                                logger.info("Decoded to message: $message. Emitting value")
-                                _outputFlow.emit(message)
-                            } catch (_: SerializationException) { }
-                        }
-                        if (errLine != null) {
-                            logger.error(errLine)
-                        }
-                        delay(100)
+                println("Using reader")
+                while (process.isAlive && isActive) {
+                    println("Reading line")
+                    val line = i.readLine()
+                    if (line != null) {
+                        logger.info("Read line from STDOUT: $line")
+                        try {
+                            val message = Json.decodeFromString<MLMessage>(line!!)
+                            logger.info("Decoded to message: $message. Emitting value")
+                            _outputFlow.emit(message)
+                        } catch (_: SerializationException) { }
                     }
+                    delay(100)
                 }
             }
 
