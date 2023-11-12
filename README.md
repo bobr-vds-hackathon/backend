@@ -9,7 +9,7 @@
 Для запуска нужен лишь установленные Docker, Git и _небольшие_ навыки работы с командной строкой
 
 ```shell
-git clone git@github.com:bobr-vds-hackathon/backend
+git clone --recurse-submodules git@github.com:bobr-vds-hackathon/backend
 docker compose up --build
 ```
 
